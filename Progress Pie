@@ -11,3 +11,53 @@ While you wait for the progress pie to fill in, you find yourself thinking about
 
 Code:
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class progressPie {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		int numberOfTestCases = sc.nextInt();
+		String solution[] = new String[numberOfTestCases];
+		int i = 0;
+		while(numberOfTestCases-- != 0 ){
+			double percentageFilled = sc.nextDouble();
+			double xCoOrdinate = sc.nextDouble();
+			double yCoOrdinate = sc.nextDouble();
+			double centreXCoOrdinate = 50, centreYCoOrdinate = 50;
+			double distance = (xCoOrdinate - centreXCoOrdinate)*(xCoOrdinate - centreXCoOrdinate) + (yCoOrdinate - centreYCoOrdinate)*(yCoOrdinate - centreYCoOrdinate);
+			//System.out.println(distance);
+			if(distance > 50.0 * 50.0){
+				//Outside the Circle
+				solution[i++] = "white";
+			}else{
+				//Inside the Circle
+				//Find theta 
+				double theta = (percentageFilled/100) * 360;
+				double angle = 90 - Math.toDegrees(Math.atan2(yCoOrdinate - centreYCoOrdinate, xCoOrdinate - centreXCoOrdinate));
+				angle = angle + Math.ceil( -angle / 360 ) * 360;
+				if(angle <= theta){
+					solution[i++] = "black";
+				}else{
+					solution[i++] = "white";
+				}
+			}
+		}
+		try {
+		    PrintStream out = new PrintStream(new FileOutputStream("OutFile.txt"));
+			for(int j = 0; j < i; j++){
+				System.out.println("Case #"+(j + 1)+ ": "+solution[j]);
+				out.println("Case #"+(j + 1)+ ": "+solution[j]);
+			}
+		} 
+		catch (FileNotFoundException e) {
+		      e.printStackTrace();
+		}
+		
+	}
+
+}
