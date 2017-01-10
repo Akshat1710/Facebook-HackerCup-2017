@@ -76,4 +76,97 @@ Case #5: 8
 
 Code:
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class lazyLoading {
+	public static void main(String args[]){
+		Scanner sc = new Scanner(System.in);
+		int numberOfTestCases = sc.nextInt();
+		int caseNumber = 1;
+		int solution[] = new int[numberOfTestCases];
+		int k = -1;
+		int testcases = numberOfTestCases;
+		while(numberOfTestCases != 0){
+			numberOfTestCases--;
+			k++;
+			//System.out.println("Here");
+			int numberOfLines = sc.nextInt();
+			int arrayOfWeight[] = new int[numberOfLines];
+			for(int i = 0; i < numberOfLines; i++){
+				arrayOfWeight[i] = sc.nextInt();
+			}
+			//Logic goes here
+			
+			Arrays.sort(arrayOfWeight);
+			
+			//Check if all numbers are greater than 50
+			int i;
+			for(i = 0; i < numberOfLines; i++){
+				if(arrayOfWeight[i] < 50)
+					break;
+			}
+			if(i == numberOfLines) //Each item is greater than 50 so each can be carried separately
+				solution[k] = numberOfLines;
+			else{
+				int bagNumber = 0;
+				//Each item is not greater than 50
+				int givenBags = arrayOfWeight.length;
+				int count = 0;
+				for(int j =  givenBags - 1; j >= 0 && givenBags > 0; j--){
+					//System.out.println(givenBags+" "+arrayOfWeight[j]);
+					if(arrayOfWeight[j] < 50)
+						if(50%arrayOfWeight[j] == 0){
+							if(givenBags >= (50/arrayOfWeight[j])){
+								//System.out.println(50/arrayOfWeight[j]+" True");
+								givenBags -= 50/arrayOfWeight[j];
+								count++;
+							}
+						}else{
+							if(givenBags >= (50/arrayOfWeight[j])+1){
+								//System.out.println(50/arrayOfWeight[j]+" True");
+								givenBags -= 50/arrayOfWeight[j] + 1;
+								count++;
+							}
+						}
+					else{
+						givenBags -= 1;
+						count++;
+					}
+				}
+				solution[k] = count;
+				//System.out.println(count);
+			}
+			caseNumber++;
+		}
+		for(int m = 0; m < testcases; m++){
+			String content = "Case #"+(m+1)+": "+solution[m] + "\n";
+			System.out.println("Case #"+(m+1)+": "+solution[m]);
+			BufferedWriter bw = null;
+			FileWriter fw = null;
+
+			try {
+
+
+				fw = new FileWriter("lazy_loading_output.txt");
+				bw = new BufferedWriter(fw);
+				bw.write(content);
+
+				//System.out.println("Done");
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+
+			} 
+		}
+	}
+}
 
